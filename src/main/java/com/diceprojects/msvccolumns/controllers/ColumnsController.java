@@ -1,7 +1,10 @@
 package com.diceprojects.msvccolumns.controllers;
 
+import com.diceprojects.msvccolumns.persistences.models.dto.ColumnsInDTO;
 import com.diceprojects.msvccolumns.persistences.models.entities.Columns;
 import com.diceprojects.msvccolumns.services.ColumnsService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -66,6 +69,23 @@ public class ColumnsController {
 
         Columns column = o.get();
         return ResponseEntity.ok().body(column);
+
+    }
+
+    @PostMapping("/create_columns")
+    public ResponseEntity<?> createColumns(@Valid @RequestBody ColumnsInDTO columnsInDTO) {
+
+        Optional<Columns> o = columnsService.createColumns(columnsInDTO);
+
+        if (o.isEmpty()) {
+            return ResponseEntity.status(HttpStatus
+                    .NO_CONTENT).build();
+        }
+
+        Columns columns = o.get();
+
+        return ResponseEntity.status(HttpStatus
+                .CREATED).body(columns);
 
     }
 

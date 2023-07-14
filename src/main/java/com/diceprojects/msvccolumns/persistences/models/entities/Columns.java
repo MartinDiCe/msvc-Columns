@@ -1,6 +1,8 @@
 package com.diceprojects.msvccolumns.persistences.models.entities;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -267,23 +269,23 @@ public class Columns {
     private String nameColumn40;
 
     @Column(name = "delimitador_archivo")
-    @NotBlank
+    @NotNull
     private char delimitadorArchivoMapping;
 
     @Column(name = "file_start", nullable = false)
-    @NotBlank
+    @NotEmpty
     private String startFile;
 
     @Column(name = "operacion_proceso", nullable = false)
-    @NotBlank
+    @NotEmpty
     private String operacionProcesoMapping;
 
     @Column(name = "tipo_entidad", nullable = false)
-    @NotBlank
+    @NotEmpty
     private String tipoEntidadMapping;
 
     @Column(name = "tipo_operacion_proceso", nullable = false)
-    @NotBlank
+    @NotEmpty
     private String tipoOperacionProcesoMapping;
 
     @Column(name = "create_date")

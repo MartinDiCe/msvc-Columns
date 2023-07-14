@@ -4,6 +4,7 @@ import com.diceprojects.msvccolumns.mapper.ColumnsInDTOColumns;
 import com.diceprojects.msvccolumns.persistences.models.dto.ColumnsInDTO;
 import com.diceprojects.msvccolumns.persistences.models.entities.Columns;
 import com.diceprojects.msvccolumns.persistences.repositories.ColumnsRepository;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -84,44 +85,58 @@ public class ColumnsServiceImplement implements ColumnsService {
     @Override
     public Optional<Columns> createColumns(ColumnsInDTO columnsInDTO) {
 
-        String operacionProcesoMapping = columnsInDTO.getOperacionProcesoMapping();
-        String tipoOperacionProcesoMapping = columnsInDTO.getTipoOperacionProcesoMapping();
-        String tipoEntidadMapping = columnsInDTO.getTipoEntidadMapping();
-        String startFile = columnsInDTO.getStartFile();
+        try {
 
-        Optional<Columns> oExistingStartFile = repository.findByStartFile(startFile);
-        if (oExistingStartFile.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "El File Start ya existe en otra configuración de columnas");
+            String operacionProcesoMapping = columnsInDTO.getOperacionProcesoMapping();
+            String tipoOperacionProcesoMapping = columnsInDTO.getTipoOperacionProcesoMapping();
+            String tipoEntidadMapping = columnsInDTO.getTipoEntidadMapping();
+            String startFile = columnsInDTO.getStartFile();
+
+            Optional<Columns> oExistingStartFile = repository.findByStartFile(startFile);
+            if (oExistingStartFile.isPresent()) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "El File Start ya existe en otra configuración de columnas");
+            }
+
+            Optional<Columns> oProcesoMapping = repository.findByOperacionProcesoMapping(operacionProcesoMapping);
+            if (oProcesoMapping.isPresent()) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "La operación ya tiene una configuración de columnas");
+            }
+
+            Optional<Columns> oTipoProcesoMapping = repository.findByOperacionProcesoMappingAndTipoOperacionProcesoMapping(
+                    operacionProcesoMapping, tipoOperacionProcesoMapping);
+            if (oTipoProcesoMapping.isPresent()) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "El tipo de operación ya tiene una configuración de columnas");
+            }
+
+            Optional<Columns> oTipoEntidadMapping = repository.findByOperacionProcesoMappingAndTipoOperacionProcesoMappingAndTipoEntidadMapping(
+                    operacionProcesoMapping, tipoOperacionProcesoMapping, tipoEntidadMapping);
+            if (oTipoEntidadMapping.isPresent()) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "El tipo de entidad ya tiene una configuración de columnas");
+            }
+
+            Optional<Columns> oStartFileMapping = repository.findByOperacionProcesoMappingAndTipoOperacionProcesoMappingAndTipoEntidadMappingAndStartFile(
+                    operacionProcesoMapping, tipoOperacionProcesoMapping, tipoEntidadMapping, startFile);
+            if (oStartFileMapping.isPresent()) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "La nomenclatura para el archivo ya existe para la misma operación");
+            }
+
+            Columns columns = mapper.map(columnsInDTO);
+
+            saveColumns(columns);
+
+            return Optional.of(columns);
         }
 
-        Optional<Columns> oProcesoMapping = repository.findByOperacionProcesoMapping(operacionProcesoMapping);
-        if (oProcesoMapping.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "La operación ya tiene una configuración de columnas");
+        catch (ConstraintViolationException e) {
+            throw new ResponseStatusException(HttpStatus
+                    .BAD_REQUEST, "Error de validación en los datos de entrada de columns", e);
         }
 
-       Optional<Columns> oTipoProcesoMapping = repository.findByOperacionProcesoMappingAndTipoOperacionProcesoMapping(
-                operacionProcesoMapping, tipoOperacionProcesoMapping);
-        if (oTipoProcesoMapping.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "El tipo de operación ya tiene una configuración de columnas");
+        catch (Exception e ) {
+            throw new ResponseStatusException(HttpStatus.
+                    CONFLICT, "Error al intentar guardar el nuevo registro de columnas. ", e);
         }
 
-        Optional<Columns> oTipoEntidadMapping = repository.findByOperacionProcesoMappingAndTipoOperacionProcesoMappingAndTipoEntidadMapping(
-                operacionProcesoMapping, tipoOperacionProcesoMapping, tipoEntidadMapping);
-        if (oTipoEntidadMapping.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "El tipo de entidad ya tiene una configuración de columnas");
-        }
-
-        Optional<Columns> oStartFileMapping = repository.findByOperacionProcesoMappingAndTipoOperacionProcesoMappingAndTipoEntidadMappingAndStartFile(
-                operacionProcesoMapping, tipoOperacionProcesoMapping, tipoEntidadMapping, startFile);
-        if (oStartFileMapping.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "La nomenclatura para el archivo ya existe para la misma operación");
-        }
-
-        Columns columns = mapper.map(columnsInDTO);
-
-        saveColumns(columns);
-
-        return Optional.of(columns);
     }
 
     @Override

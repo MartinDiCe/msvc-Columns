@@ -1,4 +1,4 @@
-package com.diceprojects.msvccolumn;
+package com.diceprojects.msvccolumns;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,4 +1,4 @@
-package com.diceprojects.importcsv.config;
+package com.diceprojects.msvccolumns.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;

@@ -21,4 +21,15 @@ public interface ColumnsRepository extends JpaRepository<Columns, Long> {
             (String operacionProcesoMapping, String tipoOperacionProcesoMapping
                     , String tipoEntidadMapping, String startFile);
 
+
+    Optional<Columns> findByStartFileAndIdNot(String startFile, Long id);
+
+    Optional<Columns> findByOperacionProcesoMappingAndIdNot(String operacionProcesoMapping, Long id);
+
+    Optional<Columns> findByOperacionProcesoMappingAndTipoOperacionProcesoMappingAndIdNot(String operacionProcesoMapping, String tipoOperacionProcesoMapping, Long id);
+
+    Optional<Columns> findByOperacionProcesoMappingAndTipoOperacionProcesoMappingAndTipoEntidadMappingAndIdNot(String operacionProcesoMapping, String tipoOperacionProcesoMapping, String tipoEntidadMapping, Long id);
+
+    Optional<Columns> findByOperacionProcesoMappingAndTipoOperacionProcesoMappingAndTipoEntidadMappingAndStartFileAndIdNot(String operacionProcesoMapping, String tipoOperacionProcesoMapping, String tipoEntidadMapping, String startFile, Long id);
 }
+

@@ -1,30 +1,40 @@
 package com.diceprojects.msvccolumns.services;
 
+import com.diceprojects.msvccolumns.exceptions.ColumnsValidator;
+import com.diceprojects.msvccolumns.exceptions.ErrorMessage;
+import com.diceprojects.msvccolumns.exceptions.ErrorResponse;
 import com.diceprojects.msvccolumns.mapper.ColumnsInDTOColumns;
 import com.diceprojects.msvccolumns.persistences.models.dto.ColumnsInDTO;
 import com.diceprojects.msvccolumns.persistences.models.entities.Columns;
 import com.diceprojects.msvccolumns.persistences.repositories.ColumnsRepository;
 import jakarta.validation.ConstraintViolationException;
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ColumnsServiceImplement implements ColumnsService {
 
     private final ColumnsRepository repository;
     private final ColumnsInDTOColumns mapper;
-    public ColumnsServiceImplement(ColumnsRepository repository, ColumnsInDTOColumns mapperColumns) {
+    private final ColumnsValidator validator;
+
+    public ColumnsServiceImplement(ColumnsRepository repository, ColumnsInDTOColumns mapperColumns, ColumnsValidator validator) {
         this.repository = repository;
         this.mapper = mapperColumns;
+        this.validator = validator;
     }
 
     @Override
     public Optional<Columns> getConfigColumnFromFileName(String fileName) {
-
         try {
             List<Columns> allColumns = repository.findAll();
             if (allColumns.isEmpty()) {
@@ -44,16 +54,15 @@ public class ColumnsServiceImplement implements ColumnsService {
         }
     }
 
-
     @Override
     public Optional<List<Columns>> findAll() {
-
         try {
             List<Columns> columns = repository.findAll();
             if (columns.isEmpty()) {
                 return Optional
                         .empty();
             }
+
             return Optional
                     .of(columns);
 
@@ -65,9 +74,45 @@ public class ColumnsServiceImplement implements ColumnsService {
 
     @Override
     public Optional<Columns> findByOperacionProcesoMapping(String operacion) {
-
         try {
             Optional<Columns> o = repository.findByOperacionProcesoMapping(operacion);
+            if (o.isEmpty()) {
+                return Optional.empty();
+            }
+
+            Columns columns = o.get();
+            return Optional.of(columns);
+
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.
+                    CONFLICT, "Error al obtener la configuración de columnas para el archivo que intentan importar. ", e);
+        }
+    }
+
+    @Override
+    public Optional<Columns> createColumns(ColumnsInDTO columnsInDTO) {
+        try {
+            Columns columns = mapper.map(columnsInDTO);
+
+            validator.validateColumns(columns);
+
+            columns.setCreateDate(LocalDateTime.now());
+
+            saveColumns(columns);
+
+            return Optional.of(columns);
+
+        } catch (ConstraintViolationException e) {
+            throw new RuntimeException(e.getMessage());
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Override
+    public Optional<Columns> findById(Long id) {
+        try {
+            Optional<Columns> o = repository.findById(id);
             if (o.isEmpty()) {
                 return Optional.empty();
             }
@@ -77,66 +122,35 @@ public class ColumnsServiceImplement implements ColumnsService {
 
         catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.
-                    CONFLICT, "Error al obtener la configuración de columnas para el archivo que intentan importar. ", e);
+                    CONFLICT, "Error al intentar buscar la configuración de las columnas con id: . "+id, e);
         }
 
     }
 
+
     @Override
-    public Optional<Columns> createColumns(ColumnsInDTO columnsInDTO) {
-
+    public Optional<Columns> update(Long id, ColumnsInDTO columnsInDTO) {
         try {
+            Optional<Columns> o = repository.findById(id);
+            Columns columns = o.orElseThrow(() ->
+                    new RuntimeException("No se encontró la entidad con el ID especificado"));
 
-            String operacionProcesoMapping = columnsInDTO.getOperacionProcesoMapping();
-            String tipoOperacionProcesoMapping = columnsInDTO.getTipoOperacionProcesoMapping();
-            String tipoEntidadMapping = columnsInDTO.getTipoEntidadMapping();
-            String startFile = columnsInDTO.getStartFile();
+            Columns columnsMap = mapper.map(columnsInDTO);
 
-            Optional<Columns> oExistingStartFile = repository.findByStartFile(startFile);
-            if (oExistingStartFile.isPresent()) {
-                throw new ResponseStatusException(HttpStatus.CONFLICT, "El File Start ya existe en otra configuración de columnas");
-            }
+            validator.validateColumnsNotID(columnsMap);
 
-            Optional<Columns> oProcesoMapping = repository.findByOperacionProcesoMapping(operacionProcesoMapping);
-            if (oProcesoMapping.isPresent()) {
-                throw new ResponseStatusException(HttpStatus.CONFLICT, "La operación ya tiene una configuración de columnas");
-            }
-
-            Optional<Columns> oTipoProcesoMapping = repository.findByOperacionProcesoMappingAndTipoOperacionProcesoMapping(
-                    operacionProcesoMapping, tipoOperacionProcesoMapping);
-            if (oTipoProcesoMapping.isPresent()) {
-                throw new ResponseStatusException(HttpStatus.CONFLICT, "El tipo de operación ya tiene una configuración de columnas");
-            }
-
-            Optional<Columns> oTipoEntidadMapping = repository.findByOperacionProcesoMappingAndTipoOperacionProcesoMappingAndTipoEntidadMapping(
-                    operacionProcesoMapping, tipoOperacionProcesoMapping, tipoEntidadMapping);
-            if (oTipoEntidadMapping.isPresent()) {
-                throw new ResponseStatusException(HttpStatus.CONFLICT, "El tipo de entidad ya tiene una configuración de columnas");
-            }
-
-            Optional<Columns> oStartFileMapping = repository.findByOperacionProcesoMappingAndTipoOperacionProcesoMappingAndTipoEntidadMappingAndStartFile(
-                    operacionProcesoMapping, tipoOperacionProcesoMapping, tipoEntidadMapping, startFile);
-            if (oStartFileMapping.isPresent()) {
-                throw new ResponseStatusException(HttpStatus.CONFLICT, "La nomenclatura para el archivo ya existe para la misma operación");
-            }
-
-            Columns columns = mapper.map(columnsInDTO);
+            BeanUtils.copyProperties(columnsMap, columns);
+            columns.setUpdateDate(LocalDateTime.now());
 
             saveColumns(columns);
 
             return Optional.of(columns);
-        }
 
-        catch (ConstraintViolationException e) {
-            throw new ResponseStatusException(HttpStatus
-                    .BAD_REQUEST, "Error de validación en los datos de entrada de columns", e);
+        } catch (ConstraintViolationException e) {
+            throw new RuntimeException(e.getMessage());
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e.getMessage());
         }
-
-        catch (Exception e ) {
-            throw new ResponseStatusException(HttpStatus.
-                    CONFLICT, "Error al intentar guardar el nuevo registro de columnas. ", e);
-        }
-
     }
 
     @Override
@@ -145,12 +159,9 @@ public class ColumnsServiceImplement implements ColumnsService {
         try {
             return repository.save(columns);
         }
-        catch (Exception e){
-            throw new ResponseStatusException(HttpStatus.
-                    CONFLICT, "Error al guardar columnas. ", e);
+        catch (RuntimeException e){
+            throw new RuntimeException(e.getMessage());
 
         }
-
     }
-
 }

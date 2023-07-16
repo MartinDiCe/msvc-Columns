@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import org.springframework.validation.FieldError;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,14 +27,28 @@ public class GlobalExceptionHandler {
         List<ErrorMessage> errorMessages = fieldErrors.stream()
                 .map(fieldError ->
                         new ErrorMessage(fieldError.getField(), fieldError.getDefaultMessage()))
-                        .collect(Collectors.toList());
+                .collect(Collectors.toList());
 
         ErrorResponse errorResponse =
-                new ErrorResponse("Se detectaron campos requeridos incompletos", errorMessages);
+                new ErrorResponse("Campos requeridos incompletos", errorMessages);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(errorResponse);
     }
 
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<?> handleRuntimeException(RuntimeException ex) {
+        String errorMessage = ex.getMessage();
 
+        ErrorResponse errorResponse;
+
+        if (errorMessage != null) {
+            errorResponse = new ErrorResponse("Error", Collections.singletonList(new ErrorMessage("RuntimeException", errorMessage)));
+        } else {
+            errorResponse = new ErrorResponse("Error", null);
+        }
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(errorResponse);
+    }
 }

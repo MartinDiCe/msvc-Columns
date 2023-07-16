@@ -6,13 +6,12 @@ import java.util.Objects;
 
 @Data
 public class ErrorMessage {
+    private String attributeName;
+    private String errorDescription;
 
-    private String field;
-    private String message;
-
-    public ErrorMessage(String field, String message) {
-        this.field = field;
-        this.message = message;
+    public ErrorMessage(String attributeName, String errorDescription) {
+        this.attributeName = attributeName;
+        this.errorDescription = errorDescription;
     }
 
     @Override
@@ -20,19 +19,19 @@ public class ErrorMessage {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ErrorMessage that = (ErrorMessage) o;
-        return Objects.equals(field, that.field);
+        return Objects.equals(attributeName, that.attributeName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(field);
+        return Objects.hash(attributeName);
     }
 
     @Override
     public String toString() {
         return "ErrorMessage{" +
-                "field='" + field + '\'' +
-                ", message='" + message + '\'' +
+                "field='" + attributeName + '\'' +
+                ", message='" + errorDescription + '\'' +
                 '}';
     }
 }

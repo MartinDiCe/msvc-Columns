@@ -22,7 +22,7 @@ public class ColumnsController {
         this.columnsService = columnsService;
     }
 
-    @GetMapping("/get-config-columns")
+    @GetMapping("/get-config")
     public ResponseEntity<Columns> getConfigColumnFromFileName(@RequestParam("fileName") String fileName) {
 
         Optional<Columns> o = columnsService.getConfigColumnFromFileName(fileName);
@@ -37,10 +37,9 @@ public class ColumnsController {
         return ResponseEntity
                 .ok()
                 .body(column);
-
     }
 
-    @GetMapping("/list-all-columns")
+    @GetMapping("/list")
     public ResponseEntity <List<Columns>> listAllColumns() {
 
         Optional<List<Columns>> o = columnsService.findAll();
@@ -55,38 +54,70 @@ public class ColumnsController {
         return ResponseEntity.
                 ok().
                 body(columnsList);
-
     }
 
-    @GetMapping("/find-columns_by_operacion")
+    @GetMapping("/find-by-operacion")
     public ResponseEntity<Columns> findByOperacionProcesoMapping(@RequestParam("operacion") String operacion) {
 
         Optional<Columns> o = columnsService.findByOperacionProcesoMapping(operacion);
 
         if(o.isEmpty()){
-            return ResponseEntity.noContent().build();
+            return ResponseEntity
+                    .noContent()
+                    .build();
         }
 
         Columns column = o.get();
-        return ResponseEntity.ok().body(column);
-
+        return ResponseEntity
+                .ok()
+                .body(column);
     }
 
-    @PostMapping("/create_columns")
+    @PostMapping("/create")
     public ResponseEntity<?> createColumns(@Valid @RequestBody ColumnsInDTO columnsInDTO) {
 
-        Optional<Columns> o = columnsService.createColumns(columnsInDTO);
+            Optional<Columns> o = columnsService.createColumns(columnsInDTO);
+
+            if (o.isEmpty()) {
+                return ResponseEntity
+                        .status(HttpStatus
+                        .NO_CONTENT)
+                        .build();
+            }
+
+            Columns columns = o.get();
+
+            return ResponseEntity
+                    .status(HttpStatus
+                    .CREATED)
+                    .body(columns);
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<Columns> getColumnById(@PathVariable Long id) {
+            Optional<Columns> o = columnsService.findById(id);
+
+            if (o.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            Columns columns = o.get();
+
+            return ResponseEntity.ok(columns);
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Columns> update(@PathVariable Long id,@Valid @RequestBody ColumnsInDTO columnsInDTO) {
+
+        Optional<Columns> o = columnsService.update(id, columnsInDTO);
 
         if (o.isEmpty()) {
-            return ResponseEntity.status(HttpStatus
-                    .NO_CONTENT).build();
+            return ResponseEntity.notFound().build();
         }
 
         Columns columns = o.get();
 
-        return ResponseEntity.status(HttpStatus
-                .CREATED).body(columns);
-
+        return ResponseEntity.ok(columns);
     }
 
 }

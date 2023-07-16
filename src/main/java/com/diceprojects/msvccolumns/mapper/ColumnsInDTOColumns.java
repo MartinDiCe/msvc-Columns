@@ -100,9 +100,8 @@ public class ColumnsInDTOColumns implements IMapper<ColumnsInDTO, Columns> {
         columns.setOperacionProcesoMapping(in.getOperacionProcesoMapping());
         columns.setTipoEntidadMapping(in.getTipoEntidadMapping());
         columns.setTipoOperacionProcesoMapping(in.getTipoOperacionProcesoMapping());
-        columns.setCreateDate(LocalDateTime.now());
-        columns.setUpdateDate(null);
-
+        columns.setCreateDate(columns.getCreateDate());
+        columns.setUpdateDate(columns.getUpdateDate());
 
         return columns;
 

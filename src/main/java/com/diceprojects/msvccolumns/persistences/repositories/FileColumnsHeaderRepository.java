@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface ColumnsRepository extends JpaRepository<FileColumnsHeader, Long> {
+public interface FileColumnsHeaderRepository extends JpaRepository<FileColumnsHeader, Long> {
     Optional<FileColumnsHeader> findByOperacionProcesoMapping(String operacion);
     Optional<FileColumnsHeader> findByStartFile(String startFile);
     List<FileColumnsHeader> findAll();
@@ -20,7 +20,6 @@ public interface ColumnsRepository extends JpaRepository<FileColumnsHeader, Long
     Optional<FileColumnsHeader> findByOperacionProcesoMappingAndTipoOperacionProcesoMappingAndTipoEntidadMappingAndStartFile
             (String operacionProcesoMapping, String tipoOperacionProcesoMapping, String tipoEntidadMapping, String startFile);
 
-
     Optional<FileColumnsHeader> findByStartFileAndIdNot(String startFile, Long id);
 
     Optional<FileColumnsHeader> findByOperacionProcesoMappingAndIdNot(String operacionProcesoMapping, Long id);
@@ -30,4 +29,5 @@ public interface ColumnsRepository extends JpaRepository<FileColumnsHeader, Long
     Optional<FileColumnsHeader> findByOperacionProcesoMappingAndTipoOperacionProcesoMappingAndTipoEntidadMappingAndIdNot(String operacionProcesoMapping, String tipoOperacionProcesoMapping, String tipoEntidadMapping, Long id);
 
     Optional<FileColumnsHeader> findByOperacionProcesoMappingAndTipoOperacionProcesoMappingAndTipoEntidadMappingAndStartFileAndIdNot(String operacionProcesoMapping, String tipoOperacionProcesoMapping, String tipoEntidadMapping, String startFile, Long id);
+
 }

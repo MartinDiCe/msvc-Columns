@@ -1,4 +1,4 @@
-package com.diceprojects.msvccolumns.persistences.models;
+package com.diceprojects.msvccolumns.persistences.models.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotEmpty;

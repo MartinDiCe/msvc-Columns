@@ -1,5 +1,6 @@
-package com.diceprojects.msvccolumns.persistences.models;
+package com.diceprojects.msvccolumns.persistences.models.entities;
 
+import com.diceprojects.msvccolumns.persistences.models.entities.FileColumnsHeader;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;

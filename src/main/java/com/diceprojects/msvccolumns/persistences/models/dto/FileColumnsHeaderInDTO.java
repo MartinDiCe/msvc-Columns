@@ -1,7 +1,5 @@
 package com.diceprojects.msvccolumns.persistences.models.dto;
 
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 

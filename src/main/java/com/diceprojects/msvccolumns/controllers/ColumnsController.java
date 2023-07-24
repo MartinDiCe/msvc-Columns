@@ -1,7 +1,6 @@
 package com.diceprojects.msvccolumns.controllers;
 
 import com.diceprojects.msvccolumns.persistences.models.dto.FileColumnsRequestInDTO;
-import com.diceprojects.msvccolumns.persistences.models.entities.FileColumnsDetails;
 import com.diceprojects.msvccolumns.persistences.models.entities.FileColumnsHeader;
 import com.diceprojects.msvccolumns.services.FileColumnsService;
 import jakarta.validation.Valid;
@@ -28,7 +27,7 @@ public class ColumnsController {
     @GetMapping("/get-config")
     public ResponseEntity<?> getConfigColumnFromFileName(@RequestParam("fileName") String fileName) {
 
-        Optional<FileColumnsDetails> o =
+        Optional<FileColumnsHeader> o =
                 fileColumnsService.getConfigColumnFromFileName(fileName);
 
         if (o.isEmpty()) {
@@ -37,11 +36,11 @@ public class ColumnsController {
                     .body("No se encontró configuración para el archivo que intenta importar. File Name: "+fileName);
         }
 
-        FileColumnsDetails fileColumnsDetails = o.get();
+        FileColumnsHeader fileColumnsHeader = o.get();
 
         return ResponseEntity
                 .ok()
-                .body(fileColumnsDetails);
+                .body(fileColumnsHeader);
     }
 
 

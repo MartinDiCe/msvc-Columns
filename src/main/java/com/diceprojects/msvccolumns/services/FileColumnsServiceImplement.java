@@ -38,7 +38,7 @@ public class FileColumnsServiceImplement implements FileColumnsService {
     }
 
     @Override
-    public Optional<FileColumnsDetails> getConfigColumnFromFileName(String fileName) {
+    public Optional<FileColumnsHeader> getConfigColumnFromFileName(String fileName) {
         try {
             List<FileColumnsHeader> allColumns = headerRepository.findAll();
             if (allColumns.isEmpty()) {
@@ -67,9 +67,7 @@ public class FileColumnsServiceImplement implements FileColumnsService {
                 return Optional.empty();
             }
 
-            FileColumnsDetails fileColumnsDetails = optionalFileColumnsDetails.get();
-
-            return Optional.of(fileColumnsDetails);
+            return Optional.of(fileColumnsHeader);
 
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus

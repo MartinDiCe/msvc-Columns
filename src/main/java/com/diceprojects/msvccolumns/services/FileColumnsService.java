@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface FileColumnsService {
-    Optional<FileColumnsDetails> getConfigColumnFromFileName(String fileName);
+    Optional<FileColumnsHeader> getConfigColumnFromFileName(String fileName);
     Optional<List<FileColumnsHeader>> findAll();
     Optional<FileColumnsHeader> findByOperacionProcesoMapping(String operacion);
     FileColumnsHeader saveColumns(FileColumnsHeader fileColumnsHeader, FileColumnsDetails fileColumnsDetails);

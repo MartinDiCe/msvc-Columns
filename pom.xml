@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.diceprojects</groupId>
-    <artifactId>msvc-fileColumnsHeader</artifactId>
+    <artifactId>msvc-Columns</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>msvc-column</name>
     <description>msvc-fileColumnsHeader</description>

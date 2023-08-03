@@ -11,6 +11,9 @@ import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDateTime;
 
+/**
+ * Entidad que representa la configuración necesaria para procesar el archivo a importar.
+ */
 @Entity
 @Getter
 @Setter

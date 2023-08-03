@@ -6,9 +6,18 @@ import io.swagger.v3.oas.models.info.License;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Configuración de Swagger para la generación de documentación de la API.
+ * Esta clase define un bean que proporciona la configuración personalizada para la generación de la documentación de Swagger.
+ */
 @Configuration
 public class SwaggerConfig {
 
+    /**
+     * Define y configura la instancia de OpenAPI para la documentación de la API.
+     *
+     * @return Una instancia de OpenAPI configurada con información sobre la API.
+     */
     @Bean
     public OpenAPI CustomOpenAPI() {
 

@@ -3,11 +3,15 @@ package com.diceprojects.msvccolumns.persistences.models.dto;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
+import java.time.LocalDateTime;
+
 /**
- * DTO (Data Transfer Object) que representa la entrada de la cabecera que contiene la configuración de importación de las columnas de un archivo.
+ * DTO (Data Transfer Object) que representa la lista de entradas de la config para procesar las columnas de un archivo.
  */
 @Data
-public class FileColumnsHeaderInDTO {
+public class FileColumnsHeaderListDTO {
+
+        public Long id;
 
         @Length(min=1, max=1)
         public String delimitadorArchivoMapping;
@@ -19,5 +23,7 @@ public class FileColumnsHeaderInDTO {
         public String tipoEntidadMapping;
 
         public String tipoOperacionProcesoMapping;
+
+        public LocalDateTime createDate;
 
 }

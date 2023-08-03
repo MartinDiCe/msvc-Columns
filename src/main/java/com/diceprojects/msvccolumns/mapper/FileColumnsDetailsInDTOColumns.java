@@ -8,9 +8,18 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+/**
+ * Clase encargada de mapear un objeto de tipo FileColumnsDetailsInDTO a un objeto de tipo FileColumnsDetails.
+ */
 @Component
 public class FileColumnsDetailsInDTOColumns implements IMapper<FileColumnsDetailsInDTO, FileColumnsDetails> {
 
+    /**
+     * Realiza el mapeo de un objeto de tipo FileColumnsDetailsInDTO a un objeto de tipo FileColumnsDetails.
+     *
+     * @param in El objeto de tipo FileColumnsDetailsInDTO a mapear.
+     * @return El objeto de tipo FileColumnsDetails resultante del mapeo.
+     */
     @Override
     public FileColumnsDetails map(FileColumnsDetailsInDTO in) {
         FileColumnsDetails fileColumnsDetails = new FileColumnsDetails();

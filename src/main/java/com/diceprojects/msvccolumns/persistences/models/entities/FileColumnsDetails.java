@@ -1,6 +1,5 @@
 package com.diceprojects.msvccolumns.persistences.models.entities;
 
-import com.diceprojects.msvccolumns.persistences.models.entities.FileColumnsHeader;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -9,6 +8,9 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+/**
+ * Entidad que representa el nombre de la columna y la posición donde se irá a buscar del archivo a procesar.
+ */
 @Entity
 @Getter
 @Setter

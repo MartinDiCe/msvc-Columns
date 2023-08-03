@@ -9,6 +9,9 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.cloud.openfeign.FeignAutoConfiguration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
+/**
+ * Clase principal que inicia la aplicación Spring Boot.
+ */
 @SpringBootApplication
 @ImportAutoConfiguration({FeignAutoConfiguration.class})
 @EnableFeignClients
@@ -17,6 +20,11 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableCaching
 public class MsvcColumnApplication {
 
+    /**
+     * Método principal que inicia la aplicación Spring Boot.
+     *
+     * @param args Argumentos de la línea de comandos.
+     */
     public static void main(String[] args) {
         SpringApplication.run(MsvcColumnApplication.class, args);
     }

@@ -2,11 +2,15 @@ package com.diceprojects.msvccolumns.persistences.models.dto;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 /**
- * DTO (Data Transfer Object) que representa la entrada de detalles de las columnas importadas de un archivo.
+ * DTO (Data Transfer Object) que representa la lista de entradas de detalles de las columnas de un archivo.
  */
 @Data
-public class FileColumnsDetailsInDTO {
+public class FileColumnsDetailsListDTO {
+
+    public Long id;
 
     public Integer column0Mapping;
 
@@ -172,5 +176,6 @@ public class FileColumnsDetailsInDTO {
 
     public String nameColumn40;
 
+    public LocalDateTime createDate;
 
 }

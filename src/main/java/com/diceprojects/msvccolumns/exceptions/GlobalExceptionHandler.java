@@ -6,18 +6,24 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-
 import org.springframework.validation.FieldError;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Clase que maneja las excepciones globales para proporcionar respuestas coherentes.
+ */
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    /**
+     * Maneja la excepción de validación lanzada por Spring cuando falla la validación de argumentos del método.
+     *
+     * @param ex Excepción de validación.
+     * @return ResponseEntity con información sobre los campos de validación que han fallado.
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handleValidationException(MethodArgumentNotValidException ex) {
         BindingResult bindingResult = ex.getBindingResult();
@@ -36,6 +42,12 @@ public class GlobalExceptionHandler {
                 .body(errorResponse);
     }
 
+    /**
+     * Maneja excepciones de tiempo de ejecución no específicas proporcionando un mensaje de error general.
+     *
+     * @param ex Excepción de tiempo de ejecución.
+     * @return ResponseEntity con información sobre la excepción de tiempo de ejecución.
+     */
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<?> handleRuntimeException(RuntimeException ex) {
         String errorMessage = ex.getMessage();

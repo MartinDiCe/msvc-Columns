@@ -39,7 +39,7 @@ Asegúrate de configurar adecuadamente el archivo `application.properties` para 
 
 ## Endpoints
 
-- [HOST]:[PORT]/doc/swagger-ui/index.html
+-[HOST]:[PORT]/doc/swagger-ui/index.html
 
 ## Contribuir
 

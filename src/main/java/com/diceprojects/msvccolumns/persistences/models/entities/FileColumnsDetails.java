@@ -1,22 +1,21 @@
 package com.diceprojects.msvccolumns.persistences.models.entities;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
 
+/**
+ * Entidad que representa el nombre de la columna y la posición donde se irá a buscar del archivo a procesar.
+ */
 @Entity
 @Getter
 @Setter
-@Table(name = "columns_mapping",
-        uniqueConstraints = {@UniqueConstraint(columnNames =
-                {"file_start","operacion_proceso","tipo_entidad","tipo_operacion_proceso"})})
-public class Columns {
+@Table(name = "file_columns_details")
+public class FileColumnsDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -268,32 +267,20 @@ public class Columns {
     @Column(name = "name_column40")
     private String nameColumn40;
 
-    @Column(name = "delimitador_archivo")
-    @NotNull
-    private char delimitadorArchivoMapping;
+    @JsonIgnore
+    @OneToOne
+    @JoinColumn(name = "file_columns_header_id")
+    private FileColumnsHeader fileColumnsHeader;
 
-    @Column(name = "file_start", nullable = false)
-    @NotEmpty
-    private String startFile;
-
-    @Column(name = "operacion_proceso", nullable = false)
-    @NotEmpty
-    private String operacionProcesoMapping;
-
-    @Column(name = "tipo_entidad", nullable = false)
-    @NotEmpty
-    private String tipoEntidadMapping;
-
-    @Column(name = "tipo_operacion_proceso", nullable = false)
-    @NotEmpty
-    private String tipoOperacionProcesoMapping;
-
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "create_date")
     private LocalDateTime createDate;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "update_date")
     private LocalDateTime updateDate;
 
-    public Columns() {
+    public FileColumnsDetails() {
     }
+
 }

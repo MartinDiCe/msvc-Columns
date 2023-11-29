@@ -25,6 +25,7 @@ public class FileColumnsHeaderInDTOColumns implements IMapper<FileColumnsHeaderI
         fileColumnsHeader.setOperacionProcesoMapping(in.getOperacionProcesoMapping());
         fileColumnsHeader.setTipoEntidadMapping(in.getTipoEntidadMapping());
         fileColumnsHeader.setTipoOperacionProcesoMapping(in.getTipoOperacionProcesoMapping());
+        fileColumnsHeader.setIgnoreFirstRowMapping(in.getIgnoreFirstRowMapping());
 
         return fileColumnsHeader;
     }

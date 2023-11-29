@@ -24,6 +24,8 @@ public class FileColumnsHeaderListDTO {
 
         public String tipoOperacionProcesoMapping;
 
+        public Boolean ignoreFirstRowMapping;
+
         public LocalDateTime createDate;
 
 }

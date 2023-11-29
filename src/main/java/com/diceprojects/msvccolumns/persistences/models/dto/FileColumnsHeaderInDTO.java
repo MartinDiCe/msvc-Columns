@@ -20,4 +20,6 @@ public class FileColumnsHeaderInDTO {
 
         public String tipoOperacionProcesoMapping;
 
+        public Boolean ignoreFirstRowMapping;
+
 }

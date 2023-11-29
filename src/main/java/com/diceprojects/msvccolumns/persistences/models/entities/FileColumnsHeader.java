@@ -41,6 +41,9 @@ public class FileColumnsHeader {
     @NotEmpty
     private String tipoEntidadMapping;
 
+    @Column(name = "ignore_first_row", nullable = false, columnDefinition = "BIT DEFAULT 0")
+    private Boolean ignoreFirstRowMapping;
+
     @Column(name = "tipo_operacion_proceso", nullable = false)
     @NotEmpty
     private String tipoOperacionProcesoMapping;

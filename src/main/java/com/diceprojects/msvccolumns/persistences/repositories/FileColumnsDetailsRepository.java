@@ -44,4 +44,6 @@ public interface FileColumnsDetailsRepository extends JpaRepository<FileColumnsD
          * @return Los detalles de las columnas del archivo si existen.
          */
         FileColumnsDetails findByFileColumnsHeader(FileColumnsHeader fileColumnsHeader);
+
+
 }

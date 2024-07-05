@@ -74,11 +74,11 @@ public class FileColumnsServiceImplement implements FileColumnsService {
 
             FileColumnsHeader fileColumnsHeader = matchingColumn.get(0);
 
-            Optional<FileColumnsDetails> optionalFileColumnsDetails = detailsRepository
-                    .findById(fileColumnsHeader.getId());
+            FileColumnsDetails fileColumnsDetails = detailsRepository.findByFileColumnsHeader(fileColumnsHeader);
 
-            if (optionalFileColumnsDetails.isEmpty()) {
-                return Optional.empty();
+            if (fileColumnsDetails == null) {
+                throw new ResponseStatusException(HttpStatus.
+                        BAD_REQUEST, "No se encontró un detalle de columnas para el id del encabezado.");
             }
 
             return Optional.of(fileColumnsHeader);

@@ -1,6 +1,6 @@
 # Microservicio Columns
 
-MSCCOLUMNS es un microservicio diseñado para facilitar la configuración del mapeo de columnas en aplicaciones. La principal funcionalidad del servicio es permitir a los usuarios definir qué tipos de archivos pueden importarse, asociarlos con un proceso específico y mapear las columnas del archivo a las columnas de una tabla, donde cada columna de la tabla puede personalizarse con un nombre descriptivo.
+MSVCCOLUMNS es un microservicio diseñado para facilitar la configuración del mapeo de columnas en aplicaciones. La principal funcionalidad del servicio es permitir a los usuarios definir qué tipos de archivos pueden importarse, asociarlos con un proceso específico y mapear las columnas del archivo a las columnas de una tabla, donde cada columna de la tabla puede personalizarse con un nombre descriptivo.
 
 ## Funcionalidades Principales
 
@@ -17,15 +17,18 @@ MSCCOLUMNS es un microservicio diseñado para facilitar la configuración del ma
 
 - **`src/main/java/com/diceprojects/msvccolumns`**: Código fuente del microservicio.
     - `exceptions`: Clases relacionadas con el manejo de excepciones.
+    - `configurations`: Clases de configuración la API.
+    - `context`: Contiene la clase para configurar Swagger.
     - `mapper`: Mapeadores para convertir entre DTOs y entidades.
     - `persistences`: Clases de persistencia, entidades y repositorios.
     - `services`: Lógica de negocio y servicios.
+    - `controllers`: EndPoints de la API.
     - `utils`: Utilidades diversas.
 - **`src/test`**: Pruebas unitarias y de integración.
 
 ## Configuración
 
-Asegúrate de configurar adecuadamente el archivo `application.properties` o `application.yml` para la base de datos y otras configuraciones necesarias.
+Asegúrate de configurar adecuadamente el archivo `application.properties` para la base de datos y otras configuraciones necesarias.
 
 ## Uso
 
@@ -36,7 +39,7 @@ Asegúrate de configurar adecuadamente el archivo `application.properties` o `ap
 
 ## Endpoints
 
-- [HOST]:[PORT]/doc/swagger-ui/index.html
+-[HOST]:[PORT]/doc/swagger-ui/index.html
 
 ## Contribuir
 
